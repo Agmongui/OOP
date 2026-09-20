@@ -19,6 +19,11 @@ void printArray(const int (&arr)[10])
     }
 }
 
+void swapElements(int (&arr)[10], int index1, int index2)
+{
+    std::swap(arr[index1], arr[index2]);
+}
+
 
 int main()
 {
@@ -29,6 +34,12 @@ int main()
     fillArray(arr);
 
     std::cout << "Массив -> ";
+    printArray(arr);
+
+    std::cout << std::endl;
+
+    swapElements(arr, 0, 9);
+    std::cout << "Поменялись местами -> ";
     printArray(arr);
 
     std::cout << std::endl;
