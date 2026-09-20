@@ -24,6 +24,14 @@ void swapElements(int (&arr)[10], int index1, int index2)
     std::swap(arr[index1], arr[index2]);
 }
 
+void multipByTwo(int (&arr)[10])
+{
+    for (int& x : arr)
+    {
+        x = x * 2;
+    }
+}
+
 
 int main()
 {
@@ -43,5 +51,10 @@ int main()
     printArray(arr);
 
     std::cout << std::endl;
+
+    multipByTwo(arr);
+    std::cout << "Умножилось на 2 -> ";
+    printArray(arr);
     
+    return 0;
 }
