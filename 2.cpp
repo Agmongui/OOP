@@ -79,6 +79,15 @@ int main()
     cout << "\n";
 
     delete[] arr;
+    arr = nullptr;
+     if (arr != nullptr)//5 само содержимое указателя
+    {
+        cout << *arr << '\n';
+    }
+    else
+    {
+        cout << "Указатель обнулён, значение вывести нельзя\n";
+    }
 
     return 0;
 }
