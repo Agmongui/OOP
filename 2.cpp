@@ -12,6 +12,34 @@ void fillArray(int* arr, int N)
     }
 }
 
+void process(int*& arr, int size)
+{
+    int Neg1 = -1;
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] < 0)
+        {
+            Neg1 = i;
+            break;
+        }
+    }
+
+    if (Neg1 != -1)
+    {
+        int newSize = Neg1;
+
+        int* newArr = new int[newSize];
+
+        for (int i = 0; i < newSize; i++)
+        {
+            newArr[i] = arr[i];
+        }
+
+        delete[] arr;
+        arr = newArr;
+    }
+}
+
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -26,6 +54,25 @@ int main()
 
     cout << "Ваш массив: ";
     for (int i = 0; i < N; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << "\n";
+
+    int newN = N;
+    for (int i = 0; i < N; i++)
+    {
+        if (arr[i] < 0)
+        {
+            newN = i;
+            break;
+        }
+    }
+
+    process(arr, N);
+
+    cout << "Массив после обработки: ";
+    for (int i = 0; i < newN; i++)
     {
         cout << arr[i] << " ";
     }
