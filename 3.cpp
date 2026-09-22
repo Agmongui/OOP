@@ -39,6 +39,7 @@ int& getElement(SafeArray& arr, int index)
 }
 
 
+
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -57,6 +58,10 @@ int main()
         cin >> arr.data[index];
     }
     cout << "Массив: ";
+    printSafe(arr);
+
+    getElement(arr, 2) = 999;
+    cout << "Массив после изменения элемента: ";
     printSafe(arr);
 
 
