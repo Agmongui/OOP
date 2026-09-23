@@ -29,6 +29,7 @@ int** allocateMatrix(int rows, int cols)
 void fillMatrix(int** matrix, int rows, int cols)
 {
     cout << "Введите оценки:\n";
+    
     for (int i{}; i < rows; ++i)
     {
         for (int j = 0; j < cols; j++)
