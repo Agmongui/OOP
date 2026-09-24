@@ -65,6 +65,11 @@ int& getElement(SafeArray& arr, int index)
  */ 
 void reSizeArray(SafeArray& arr, int M)
 {
+    if (M < 0)
+    {
+        cout << "Размер > 0 \n";
+    }
+
     if (M == arr.size)
     {
         return;
@@ -127,6 +132,11 @@ int main()
     cout << "Введи размер массива: ";
     cin >> size;
 
+    if (size <= 0)
+    {
+        cout << "Размер должен быть >0 ";
+    }
+
     SafeArray arr = createArray(size);
 
     cout << "Введите элементы массива:\n";
@@ -145,6 +155,7 @@ int main()
     int M = 0;
     cout << "Введите новый размер массива: ";
     cin >> M;
+    
     reSizeArray(arr, M);
     cout << "После изменения размера: ";
     printSafe(arr);
