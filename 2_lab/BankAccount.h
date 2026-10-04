@@ -41,4 +41,6 @@ public:
     void deposit(double amount);// получает счет
     void withdraw(double amount);// снять деньги
     void block(); // заблокировать счет
+
+    void print() const;
 };
