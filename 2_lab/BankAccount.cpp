@@ -1,4 +1,7 @@
 #include "BankAccount.h"
+#include <iostream>
+
+using namespace std;
 
 // Конструктор без параметров
 BankAccount::BankAccount()
@@ -8,8 +11,8 @@ BankAccount::BankAccount()
     balance = 0.0;
     active = true;
 
-    currency.code = "EUR";
-    currency.symbol = "€";
+    currency.code = "RUB";
+    currency.symbol = "₽";
 }
 
 // Конструктор с параметрами (через список инициализации)
@@ -49,8 +52,18 @@ BankAccount::BankAccount(long long number,
     balance = 0.0;
     active = true;
 
-    currency.code = "EUR";
-    currency.symbol = "€";
+    currency.code = "RUB";
+    currency.symbol = "₽";
+
+    if (accountNumber <= 0)
+    {
+        accountNumber = 1;
+    }
+
+    if (ownerName.empty())
+    {
+        ownerName = "Unknown";
+    }
 }
 
 long long BankAccount::getAccountNumber() const
@@ -97,4 +110,25 @@ void BankAccount::withdraw(double amount)
 void BankAccount::block()
 {
     active = false;
+}
+
+void BankAccount::unblock()
+{
+    active = true;
+}
+
+void BankAccount::print() const
+{
+    cout << "Номер счёта: " << accountNumber << endl;
+    cout << "Имя: " << ownerName << endl;
+    cout << "Баланс: " << balance << " " << currency.symbol << endl;
+
+    if (active)
+    {
+        cout << "Статус: Активный" << endl;
+    }
+    else
+    {
+        cout << "Статус: Заблокирован" << endl;
+    }
 }
