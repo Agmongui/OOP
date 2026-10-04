@@ -7,28 +7,16 @@ int main()
 {
     system("chcp 65001 > nul");
 
-    long long number;
-    string name;
-    double balance;
-
-    cout << "Введите номер счёта: ";
-    cin >> number;
-
-    cout << "Введите имя владельца: ";
-    cin >> name;
-
-    cout << "Введите начальный баланс: ";
-    cin >> balance;
-
     Currency ruble;
     ruble.code = "RUB";
     ruble.symbol = "₽";
 
-    BankAccount account(number, name, balance, ruble);
-
-    BankAccount account2(123456, "Даня");
-
+    BankAccount account(123456, "Ivan", 5000, ruble);
+    BankAccount account2(654321, "Petr");
     BankAccount account3;
+
+    cout << "Количество существующих объектов: "
+         << BankAccount::getObjectCount() << endl;
 
     cout << endl;
     cout << "Состояние первого счёта:" << endl;
