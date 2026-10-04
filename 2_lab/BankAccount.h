@@ -29,6 +29,8 @@ public:
  
     BankAccount(long long number, 
                 const string& owner);// Конструктор с номером и владельцем 
+
+    ~BankAccount(); // Деструктор
  
     // геттер(позволяет читать значения приватного воля) 
     long long getAccountNumber() const; 
