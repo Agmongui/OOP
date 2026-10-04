@@ -12,17 +12,17 @@ BankAccount::BankAccount()
     currency.symbol = "€";
 }
 
-// Конструктор с параметрами
+// Конструктор с параметрами (через список инициализации)
 BankAccount::BankAccount(long long number,
                          const string& owner,
                          double initialBalance,
                          const Currency& accountCurrency)
+    : accountNumber(number),
+      ownerName(owner),
+      balance(initialBalance),
+      active(true),
+      currency(accountCurrency)
 {
-    accountNumber = number;
-    ownerName = owner;
-    balance = initialBalance;
-    active = true;
-    currency = accountCurrency;
 }
 
 // Конструктор с номером и владельцем
