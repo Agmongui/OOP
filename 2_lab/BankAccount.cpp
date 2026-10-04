@@ -3,6 +3,9 @@
 
 using namespace std;
 
+// Создание и начальная инициализация статического счётчика
+int BankAccount::objectCount = 0;
+
 // Конструктор без параметров
 BankAccount::BankAccount()
 {
@@ -13,20 +16,22 @@ BankAccount::BankAccount()
 
     currency.code = "RUB";
     currency.symbol = "₽";
+
+    objectCount++; // увеличиваем количество существующих объектов
 }
 
-// Конструктор с параметрами (через список инициализации)
+// Конструктор с параметрами
 BankAccount::BankAccount(long long number,
                          const string& owner,
                          double initialBalance,
                          const Currency& accountCurrency)
-    : accountNumber(number),
-      ownerName(owner),
-      balance(initialBalance),
-      active(true),
-      currency(accountCurrency)
-
 {
+    accountNumber = number;
+    ownerName = owner;
+    balance = initialBalance;
+    active = true;
+    currency = accountCurrency;
+
     if (accountNumber <= 0)
     {
         accountNumber = 1;
@@ -41,6 +46,8 @@ BankAccount::BankAccount(long long number,
     {
         balance = 0.0;
     }
+
+    objectCount++; // увеличиваем количество существующих объектов
 }
 
 // Конструктор с номером и владельцем
@@ -64,11 +71,14 @@ BankAccount::BankAccount(long long number,
     {
         ownerName = "Unknown";
     }
+
+    objectCount++; // увеличиваем количество существующих объектов
 }
 
-BankAccount::~BankAccount() // деструктор
+// Статический метод получения количества существующих объектов
+int BankAccount::getObjectCount()
 {
-    cout << "Счёт " << accountNumber << " закрыт." << endl;
+    return objectCount;
 }
 
 long long BankAccount::getAccountNumber() const
