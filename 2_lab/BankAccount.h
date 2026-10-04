@@ -6,7 +6,7 @@ using namespace std;
 
 struct Currency
 {
-    string code; 
+    string code;
     string symbol;
 };
 
@@ -20,10 +20,13 @@ private:
     Currency currency;
 
 public:
-    BankAccount();
+    BankAccount();// Конструктор без параметров
 
     BankAccount(long long number,
-                string owner,
+                const string& owner,
                 double initialBalance,
-                Currency accountCurrency);
+                const Currency& accountCurrency);// Конструктор с параметрами
+
+    BankAccount(long long number,
+                const string& owner);// Конструктор с номером и владельцем
 };
