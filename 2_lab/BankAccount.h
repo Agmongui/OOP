@@ -29,4 +29,11 @@ public:
 
     BankAccount(long long number,
                 const string& owner);// Конструктор с номером и владельцем
+
+    // геттер(позволяет читать значения приватного воля)
+    long long getAccountNumber() const;
+    string getOwnerName() const;
+    double getBalance() const;
+    bool isActive() const;
+    Currency getCurrency() const;
 };
