@@ -22,7 +22,22 @@ BankAccount::BankAccount(long long number,
       balance(initialBalance),
       active(true),
       currency(accountCurrency)
+
 {
+    if (accountNumber <= 0)
+    {
+        accountNumber = 1;
+    }
+
+    if (ownerName.empty())
+    {
+        ownerName = "Unknown";
+    }
+
+    if (balance < 0)
+    {
+        balance = 0.0;
+    }
 }
 
 // Конструктор с номером и владельцем
