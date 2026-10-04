@@ -15,7 +15,7 @@ class BankAccount
 private: 
     long long accountNumber; 
     string ownerName; 
-    double balance; 
+    long long balance; 
     bool active; 
     Currency currency; 
  
