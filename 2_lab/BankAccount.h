@@ -36,4 +36,9 @@ public:
     double getBalance() const;
     bool isActive() const;
     Currency getCurrency() const;
+
+    // изменяет состояние объекта
+    void deposit(double amount);// получает счет
+    void withdraw(double amount);// снять деньги
+    void block(); // заблокировать счет
 };
