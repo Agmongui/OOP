@@ -1,0 +1,85 @@
+#include "BankAccount.h"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    system("chcp 65001 > nul");
+
+    long long number;
+    string name;
+    double balance;
+
+    cout << "Введите номер счёта: ";
+    cin >> number;
+
+    cout << "Введите имя владельца: ";
+    cin >> name;
+
+    cout << "Введите начальный баланс: ";
+    cin >> balance;
+
+    Currency ruble;
+    ruble.code = "RUB";
+    ruble.symbol = "₽";
+
+    BankAccount account(number, name, balance, ruble);
+
+    cout << endl;
+    cout << "Информация о банковском счёте:" << endl;
+
+    account.print();
+
+    double amount;
+
+    cout << endl;
+    cout << "Введите сумму для пополнения: ";
+    cin >> amount;
+
+    account.deposit(amount);
+
+    cout << endl;
+    cout << "После пополнения:" << endl;
+    account.print();
+
+    cout << endl;
+    cout << "Введите сумму для снятия: ";
+    cin >> amount;
+
+    account.withdraw(amount);
+
+    cout << endl;
+    cout << "После снятия:" << endl;
+    account.print();
+
+    cout << endl;
+    cout << "Заблокировать счёт? (1 - да, 0 - нет): ";
+    
+    int choice;
+    cin >> choice;
+
+    if (choice == 1)
+    {
+        account.block();
+    }
+
+    cout << endl;
+    cout << "Текущее состояние счёта:" << endl;
+    account.print();
+
+    cout << endl;
+    cout << "Разблокировать счёт? (1 - да, 0 - нет): ";
+    cin >> choice;
+
+    if (choice == 1)
+    {
+        account.unblock();
+    }
+
+    cout << endl;
+    cout << "Итоговое состояние счёта:" << endl;
+    account.print();
+
+    return 0;
+}
