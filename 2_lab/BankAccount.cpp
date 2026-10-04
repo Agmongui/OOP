@@ -66,6 +66,11 @@ BankAccount::BankAccount(long long number,
     }
 }
 
+BankAccount::~BankAccount() // деструктор
+{
+    cout << "Счёт " << accountNumber << " закрыт." << endl;
+}
+
 long long BankAccount::getAccountNumber() const
 {
     return accountNumber; // номер счета
