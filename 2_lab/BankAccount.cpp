@@ -62,3 +62,24 @@ Currency BankAccount::getCurrency() const
 {
     return currency; // валюта
 }
+
+void BankAccount::deposit(double amount)
+{
+    if (active && amount > 0)
+    {
+        balance += amount;
+    }
+}
+
+void BankAccount::withdraw(double amount)
+{
+    if (active && amount > 0 && amount <= balance)
+    {
+        balance -= amount;
+    }
+}
+
+void BankAccount::block()
+{
+    active = false;
+}
