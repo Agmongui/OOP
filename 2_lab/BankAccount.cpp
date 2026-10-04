@@ -37,3 +37,28 @@ BankAccount::BankAccount(long long number,
     currency.code = "EUR";
     currency.symbol = "€";
 }
+
+long long BankAccount::getAccountNumber() const
+{
+    return accountNumber; // номер счета
+}
+
+string BankAccount::getOwnerName() const
+{
+    return ownerName; // имя
+}
+
+double BankAccount::getBalance() const
+{
+    return balance; // баланс
+}
+
+bool BankAccount::isActive() const
+{
+    return active; // счет
+}
+
+Currency BankAccount::getCurrency() const
+{
+    return currency; // валюта
+}
