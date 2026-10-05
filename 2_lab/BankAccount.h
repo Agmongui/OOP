@@ -64,8 +64,6 @@ public:
     BankAccount(long long number,
                 const string& owner);// Конструктор с номером и владельцем
 
-    BankAccount(const BankAccount& other);// Конструктор копирования
-
     ~BankAccount();// Деструктор
 
     static int getObjectCount();// Статический счётчик
