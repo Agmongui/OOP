@@ -1,52 +1,90 @@
-#pragma once // чтобы один и тот же файл не подключался несколько раз при компиляции
+#pragma once // защита от многократного подключения одного и того же заголовочного файла.
 
-#include <string>
+#include <string> // для хранения текста
 
 using namespace std;
 
-struct Currency
-{
-    string code;
-    string symbol;
-};
-
-class BankAccount
+/**
+ * @brief Представляет тип банковского счета
+ * Если savings == false, счет является дебетовым.
+ * Если savings == true, счет является накопительным.
+ */
+class AccountType
 {
 private:
+    bool savings;
+
+public:
+    AccountType(bool isSavings = false);
+
+    bool isSavings() const;
+    string toString() const;
+};
+
+/**
+ * @brief Представляет банковский счет
+ * 
+ * Класс хранит информацию о банковском счете,
+ * его владельце, балансе, валюте, статусе
+ * и типе счета.
+ * 
+ * Поддерживает два типа счетов:
+ * дебетовый и накопительный.
+ *
+ * Для накопительного счета при каждом пополнении
+ * начисляется 3 процента от внесенной суммы.
+ */
+class BankAccount
+{
+private: 
     long long accountNumber;
     string ownerName;
     double balance;
     bool active;
-    Currency currency;
+    string currency;
+    AccountType type;
 
-    static int objectCount; // количество существующих объектов
+    static int objectCount;
+
+    // Проверка корректности данных
+    void validateAccountNumber(long long number) const;
+    void validateOwnerName(const string& owner) const;
+    void validateBalance(double balance) const;
 
 public:
-    BankAccount();// Конструктор без параметров
 
+    BankAccount();// Конструктор без параметров
+    
     BankAccount(long long number,
                 const string& owner,
                 double initialBalance,
-                const Currency& accountCurrency);// Конструктор с параметрами
+                const string& accountCurrency,
+                const AccountType& accountType);// Конструктор с параметрами
 
     BankAccount(long long number,
                 const string& owner);// Конструктор с номером и владельцем
 
-    // Статический метод для получения количества объектов
-    static int getObjectCount();
+    BankAccount(const BankAccount& other);// Конструктор копирования
 
-    // геттер(позволяет читать значения приватного поля)
+    ~BankAccount();// Деструктор
+
+    static int getObjectCount();// Статический счётчик
+    // Геттеры
     long long getAccountNumber() const;
     string getOwnerName() const;
     double getBalance() const;
     bool isActive() const;
-    Currency getCurrency() const;
+    string getCurrency() const;
+    AccountType getType() const;
+    // Изменяющие методы
+    void deposit(double amount);
+    bool withdraw(double amount);
 
-    // изменяет состояние объекта
-    void deposit(double amount);// получает счет
-    void withdraw(double amount);// снять деньги
-    void block(); // заблокировать счет
-    void unblock(); // разблокировать счет
+    void block();
+    void unblock();
 
+    /**
+     * @brief Выводит информацию о счете.
+     */
     void print() const;
 };
