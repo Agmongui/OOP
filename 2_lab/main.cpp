@@ -20,7 +20,7 @@ int main()
     system("chcp 65001 > nul");
 
     AccountType debitType(false);
-    AccountType savingsType(true);
+    AccountType savingsType(true, 5.0); // накопительный счет со ставкой 5%
 
     BankAccount account(
         1,
@@ -85,6 +85,7 @@ int main()
     cout << "Какой счет создать?" << endl;
     cout << "1) Дебетовый" << endl;
     cout << "2) Накопительный" << endl;
+
 // Ввод номера типа счета
     do
     {
@@ -102,9 +103,12 @@ int main()
     } while (accountTypeChoice != 1 &&
              accountTypeChoice != 2);
 
+    // Для накопительного счета используем ставку 5%
     AccountType selectedType(
-        accountTypeChoice == 2
+        accountTypeChoice == 2,
+        5.0
     );
+
 // Ввод номера
     do
     {
@@ -136,6 +140,7 @@ int main()
         }
 
     } while (owner.empty());
+
 // Ввод начального баланса
     do
     {
