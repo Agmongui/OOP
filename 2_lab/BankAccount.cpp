@@ -10,12 +10,14 @@ using namespace std;
  * @brief Создает объект типа AccountType.
  * @param isSavings Определяет тип банковского счета.
  * true — накопительный счет, false — дебетовый.
- * @details Значение параметра сохраняется в поле savings
- * и используется для определения поведения счета.
- * @note По умолчанию создается дебетовый счет.
+ * @param rate Процентная ставка по счету.
+ * @details Значения параметров сохраняются в полях savings и procent_stavka.
+ * Для дебетового счета ставка принудительно обнуляется.
+ * @note По умолчанию создается дебетовый счет со ставкой 3%.
  */
-AccountType::AccountType(bool isSavings)
-    : savings(isSavings) // поле savings получает значение параметра isSavings
+AccountType::AccountType(bool isSavings, double rate)
+    : savings(isSavings), // поле savings получает значение параметра isSavings
+      procent_stavka(isSavings ? rate : 0.0) // для дебетового счета ставка всегда 0
 {
 }
 
@@ -27,6 +29,15 @@ AccountType::AccountType(bool isSavings)
 bool AccountType::isSavings() const // возвращает тип счета
 {
     return savings;
+}
+
+/**
+ * @brief Возвращает процентную ставку по счету.
+ * @return Процентная ставка (например, 3.0 означает 3%).
+ */
+double AccountType::getProcentStavka() const
+{
+    return procent_stavka;
 }
 
 /**
@@ -80,6 +91,7 @@ void BankAccount::validateOwnerName(const string& owner) const
         );
     }
 }
+
 /**
  * @brief Проверяет корректность баланса.
  * @param balance Баланс банковского счета.
@@ -176,6 +188,7 @@ BankAccount::BankAccount(
 
     objectCount++;
 }
+
 /**
  * @brief Уничтожает объект банковского счета.
  * @details При уничтожении объекта выводится сообщение
@@ -191,6 +204,7 @@ BankAccount::~BankAccount()
 
     objectCount--;
 }
+
 /**
  * @brief Возвращает количество существующих объектов BankAccount.
  * @return Текущее количество объектов класса.
@@ -199,6 +213,7 @@ int BankAccount::getObjectCount()
 {
     return objectCount;
 }
+
 /**
  * @brief Возвращает номер банковского счета.
  * @return Номер счета.
@@ -207,6 +222,7 @@ long long BankAccount::getAccountNumber() const
 {
     return accountNumber;
 }
+
 /**
  * @brief Возвращает имя банковского счета.
  * @return Имя счета.
@@ -215,6 +231,7 @@ string BankAccount::getOwnerName() const
 {
     return ownerName;
 }
+
 /**
  * @brief Возвращает баланс банковского счета.
  * @return Баланс счета.
@@ -223,6 +240,7 @@ double BankAccount::getBalance() const
 {
     return balance;
 }
+
 /**
  * @brief Возвращает статус банковского счета.
  * @return true, если счет активен.
@@ -232,6 +250,7 @@ bool BankAccount::isActive() const
 {
     return active;
 }
+
 /**
  * @brief Возвращает валюту банковского счета.
  * @return Валюту счета.
@@ -240,6 +259,7 @@ string BankAccount::getCurrency() const
 {
     return currency;
 }
+
 /**
  * @brief Возвращает тип банковского счета.
  * @return Объект AccountType, описывающий тип счета
@@ -248,6 +268,7 @@ AccountType BankAccount::getType() const
 {
     return type;
 }
+
 /**
  * @brief Пополняет банковский счет.
  * @param amount Сумма пополнения счета.
@@ -257,8 +278,8 @@ AccountType BankAccount::getType() const
  * Для дебетового счета сумма просто добавляется к балансу.
  *
  * Для накопительного счета дополнительно начисляется
- * 3 процента от внесенной суммы.
- * @note Накопительный счет получает 3% именно
+ * процент от внесенной суммы, хранящийся в поле procent_stavka.
+ * @note Накопительный счет получает процент именно
  * от суммы текущего пополнения.
  * @warning Заблокированный счет нельзя пополнять.
  * Сумма пополнения должна быть больше нуля.
@@ -281,19 +302,22 @@ void BankAccount::deposit(double amount)
 
     balance += amount;
 
-    // Для накопительного счета начисляем 3%
+    // Для накопительного счета начисляем процент из поля procent_stavka
     if (type.isSavings())
     {
-        double interest = amount * 0.03;
+        double interest = amount * type.getProcentStavka() / 100.0;
 
         balance += interest;
 
-        cout << "Начислено 3%: "
+        cout << "Начислено "
+             << type.getProcentStavka()
+             << "%: "
              << fixed << setprecision(2)
              << interest << " "
              << currency << endl;
     }
 }
+
 /**
  * @brief Снимает деньги с банковского счета.
  * @param amount Сумма, которую необходимо снять.
@@ -340,6 +364,7 @@ bool BankAccount::withdraw(double amount)
 
     return true;
 }
+
 /**
  * @brief Блокирует банковский счет.
  */
@@ -347,6 +372,7 @@ void BankAccount::block()
 {
     active = false;
 }
+
 /**
  * @brief Разблокирует банковский счет.
  */
@@ -354,6 +380,7 @@ void BankAccount::unblock()
 {
     active = true;
 }
+
 /**
  * @brief Выводит информацию о банковском счете.
  * @details Выводит номер счета, имя владельца,
