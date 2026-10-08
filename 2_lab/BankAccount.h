@@ -1,7 +1,6 @@
-#pragma once
+#pragma once // чтобы не использовался заголовок дважды
 
 #include <string>
-#include <stdexcept>
 
 using namespace std;
 
@@ -15,7 +14,7 @@ using namespace std;
  */
 class AccountType
 {
-private:
+private:// основной принцип инкапсуляции (скорытие информации)
     /**
      * @brief Признак накопительного счета
      * true — накопительный счет
