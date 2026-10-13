@@ -69,6 +69,63 @@ public:
         --(*this);
         return old;
     }
+    //cложение с присваиванием
+    Money& operator+=(const Money& other) 
+    {
+        rubles += other.rubles;
+        kopecks += other.kopecks;
+
+        rubles += kopecks / 100;
+        kopecks %= 100;
+
+        return *this;
+    }
+    //вычитание с присваиванием
+    Money& operator-=(const Money& other) 
+    {
+    long long total1 = rubles * 100 + kopecks;
+    long long total2 = other.rubles * 100 + other.kopecks;
+
+    if (total2 > total1) 
+    {
+        cout << "Недостаточно средств" << endl;
+        return *this;
+    }
+
+    long long result = total1 - total2;
+
+    rubles = result / 100;
+    kopecks = result % 100;
+
+    return *this;
+    }
+    //умножение с присваиванием
+    Money& operator*=(double number) 
+    {
+    long long total = rubles * 100 + kopecks;
+    total = static_cast<long long>(total * number);//преобразует результат обратно в ценлое число копеек
+    rubles = total / 100;
+    kopecks = total % 100;
+    return *this;
+    }
+    //деление с присваиванием
+    Money& operator/=(double number) 
+    {
+    if (number == 0) 
+    {
+        cout << "На 0 делить нельзя" << endl;
+        return *this;
+    }
+
+    long long total = rubles * 100 + kopecks;
+    total = static_cast<long long>(total / number);
+
+    rubles = total / 100;
+    kopecks = total % 100;
+
+    return *this;
+}
+
 };
 
 int main() 
