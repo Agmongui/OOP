@@ -124,7 +124,74 @@ public:
     kopecks = total % 100;
 
     return *this;
-}
+    }
+    //сложение двух сумм
+    friend Money operator+(Money m1, const Money& m2)//разрешает обращаться к закрытым полям
+    {
+    m1 += m2;
+    return m1;
+    }
+    //вычитание двух сумм
+    friend Money operator-(Money m1, const Money& m2)
+    {
+        m1 -= m2;
+        return m1;
+    }
+    // Умножение двух сумм
+    friend Money operator*(Money m1, double number)
+    {
+        m1 *= number;
+        return m1;
+    }
+    // Деление двух сумм
+    friend Money operator/(Money m1, double number)
+    {
+        m1 /= number;
+        return m1;
+    }
+    // Проверка: m1 меньше m2
+    friend bool operator<(const Money& m1, const Money& m2)
+    {
+        long long total1 = m1.rubles * 100 + m1.kopecks;
+        long long total2 = m2.rubles * 100 + m2.kopecks;
+
+        return total1 < total2;
+    }
+    // Проверка: m1 больше m2
+    friend bool operator>(const Money& m1, const Money& m2)
+    {
+        long long total1 = m1.rubles * 100 + m1.kopecks;
+        long long total2 = m2.rubles * 100 + m2.kopecks;
+
+        return total1 > total2;
+    }
+    // Проверка: m1 меньше или равна m2
+    friend bool operator<=(const Money& m1, const Money& m2)
+    {
+        long long total1 = m1.rubles * 100 + m1.kopecks;
+        long long total2 = m2.rubles * 100 + m2.kopecks;
+
+        return total1 <= total2;
+    }
+    // Проверка: m1 больше или равна m2
+    friend bool operator>=(const Money& m1, const Money& m2)
+    {
+        long long total1 = m1.rubles * 100 + m1.kopecks;
+        long long total2 = m2.rubles * 100 + m2.kopecks;
+
+        return total1 >= total2;
+    }
+    // Проверка равенства сумм
+    friend bool operator==(const Money& m1, const Money& m2)
+    {
+        return m1.rubles == m2.rubles &&
+            m1.kopecks == m2.kopecks;
+    }
+    // Проверка неравенства сумм
+    friend bool operator!=(const Money& m1, const Money& m2)
+    {
+        return !(m1 == m2);
+    }
 
 };
 
