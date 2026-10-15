@@ -7,6 +7,7 @@ class Money
 private:
     long long rubles;
     int kopecks;
+    mutable int accessCount = 0;//меняет const
 
 public:
     //конструктор без параметров
@@ -17,7 +18,7 @@ public:
     }
 
     //конструктор с рублями
-    Money(long long r) 
+    explicit Money(long long r) // explicit запрещает неявное преобразование числа в Money
     {
         rubles = r;
         kopecks = 0;
@@ -28,6 +29,12 @@ public:
     {
         rubles = r + k / 100;
         kopecks = k % 100;
+    }
+
+    void showAccessCount() const// вывод количества обращений к объекту
+    {
+        accessCount++;
+        cout << "Количество обращений: " << accessCount << endl;
     }
     //префиксный инкремент 
     Money& operator++() 
