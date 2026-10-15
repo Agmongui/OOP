@@ -8,6 +8,7 @@ private:
     long long rubles;
     int kopecks;
     mutable int accessCount = 0;//меняет const
+    static int count; // статический счетчик
 
 public:
     //конструктор без параметров
@@ -15,6 +16,7 @@ public:
     {
         rubles = 0;
         kopecks = 0;
+        count++;
     }
 
     //конструктор с рублями
@@ -22,6 +24,7 @@ public:
     {
         rubles = r;
         kopecks = 0;
+        count++;
     }
 
     //конструктор с рублями и копейками
@@ -29,6 +32,7 @@ public:
     {
         rubles = r + k / 100;
         kopecks = k % 100;
+        count++;
     }
 
     void showAccessCount() const// вывод количества обращений к объекту
@@ -200,6 +204,7 @@ public:
         return !(m1 == m2);
     }
 
+    int Money::count = 0;
 };
 
 int main() 
