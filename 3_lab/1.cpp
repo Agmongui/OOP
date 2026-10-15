@@ -35,11 +35,17 @@ public:
         count++;
     }
 
+    ~Money()//деструктор
+    {
+        cout << "Объект Money уничтожен" << endl;
+    }
+
     void showAccessCount() const// вывод количества обращений к объекту
     {
         accessCount++;
         cout << "Количество обращений: " << accessCount << endl;
     }
+
     //префиксный инкремент 
     Money& operator++() 
     {
@@ -53,6 +59,7 @@ public:
 
     return *this;
     }
+
     //постфиксный инкремент
     Money operator++(int) 
     {
@@ -60,6 +67,7 @@ public:
         ++(*this);
         return old;
     }
+
     //префиксный декремент 
     Money& operator--() 
     {
@@ -73,6 +81,7 @@ public:
 
         return *this;
     }
+
     //постфиксный декремент
     Money operator--(int) 
     {
@@ -80,6 +89,7 @@ public:
         --(*this);
         return old;
     }
+
     //cложение с присваиванием
     Money& operator+=(const Money& other) 
     {
@@ -91,6 +101,7 @@ public:
 
         return *this;
     }
+
     //вычитание с присваиванием
     Money& operator-=(const Money& other) 
     {
@@ -110,6 +121,7 @@ public:
 
     return *this;
     }
+
     //умножение с присваиванием
     Money& operator*=(double number) 
     {
@@ -119,6 +131,7 @@ public:
     kopecks = total % 100;
     return *this;
     }
+
     //деление с присваиванием
     Money& operator/=(double number) 
     {
@@ -136,30 +149,35 @@ public:
 
     return *this;
     }
+
     //сложение двух сумм
     friend Money operator+(Money m1, const Money& m2)//разрешает обращаться к закрытым полям
     {
     m1 += m2;
     return m1;
     }
+
     //вычитание двух сумм
     friend Money operator-(Money m1, const Money& m2)
     {
         m1 -= m2;
         return m1;
     }
+
     // Умножение двух сумм
     friend Money operator*(Money m1, double number)
     {
         m1 *= number;
         return m1;
     }
+
     // Деление двух сумм
     friend Money operator/(Money m1, double number)
     {
         m1 /= number;
         return m1;
     }
+
     // Проверка: m1 меньше m2
     friend bool operator<(const Money& m1, const Money& m2)
     {
@@ -168,6 +186,7 @@ public:
 
         return total1 < total2;
     }
+
     // Проверка: m1 больше m2
     friend bool operator>(const Money& m1, const Money& m2)
     {
@@ -176,6 +195,7 @@ public:
 
         return total1 > total2;
     }
+
     // Проверка: m1 меньше или равна m2
     friend bool operator<=(const Money& m1, const Money& m2)
     {
@@ -184,6 +204,7 @@ public:
 
         return total1 <= total2;
     }
+
     // Проверка: m1 больше или равна m2
     friend bool operator>=(const Money& m1, const Money& m2)
     {
@@ -192,20 +213,23 @@ public:
 
         return total1 >= total2;
     }
+
     // Проверка равенства сумм
     friend bool operator==(const Money& m1, const Money& m2)
     {
         return m1.rubles == m2.rubles &&
             m1.kopecks == m2.kopecks;
     }
+
     // Проверка неравенства сумм
     friend bool operator!=(const Money& m1, const Money& m2)
     {
         return !(m1 == m2);
     }
 
-    int Money::count = 0;
 };
+
+int Money::count = 0;
 
 int main() 
 {
