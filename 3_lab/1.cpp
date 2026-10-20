@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 
 using namespace std;
 
@@ -7,11 +8,11 @@ class Money
 private:
     long long rubles;
     int kopecks;
-    mutable int accessCount = 0;//меняет const
+    mutable int accessCount = 0; // меняет const
     static int count; // статический счетчик
 
 public:
-    //конструктор без параметров
+    // конструктор без параметров
     Money() 
     {
         rubles = 0;
@@ -19,15 +20,15 @@ public:
         count++;
     }
 
-    //конструктор с рублями
-    explicit Money(long long r) // explicit запрещает неявное преобразование числа в Money
+    // конструктор с рублями
+    explicit Money(long long r) 
     {
         rubles = r;
         kopecks = 0;
         count++;
     }
 
-    //конструктор с рублями и копейками
+    // конструктор с рублями и копейками
     Money(long long r, int k) 
     {
         rubles = r + k / 100;
@@ -35,32 +36,52 @@ public:
         count++;
     }
 
-    ~Money()//деструктор
+    // деструктор
+    ~Money() 
     {
-        cout << "Объект Money уничтожен" << endl;
+        cout << "\nОбъект Money уничтожен" << endl;
     }
 
-    void showAccessCount() const// вывод количества обращений к объекту
+    // вывод суммы
+    void show() const 
+    {
+        cout << rubles << " руб. ";
+
+        if (kopecks < 10)
+            cout << "0";
+
+        cout << kopecks << " коп." << endl;
+    }
+
+    // статический счетчик
+    static int getCount() 
+    {
+        return count;
+    }
+
+    // счетчик обращений
+    void showAccessCount() const 
     {
         accessCount++;
-        cout << "Количество обращений: " << accessCount << endl;
+        cout << "Обращений к сумме: "
+             << accessCount << endl;
     }
 
-    //префиксный инкремент 
+    // префиксный инкремент
     Money& operator++() 
     {
-    kopecks++;
+        kopecks++;
 
-    if (kopecks == 100) 
-    {
-        rubles++;
-        kopecks = 0;
+        if (kopecks == 100) 
+        {
+            rubles++;
+            kopecks = 0;
+        }
+
+        return *this;
     }
 
-    return *this;
-    }
-
-    //постфиксный инкремент
+    // постфиксный инкремент
     Money operator++(int) 
     {
         Money old = *this;
@@ -68,7 +89,7 @@ public:
         return old;
     }
 
-    //префиксный декремент 
+    // префиксный декремент
     Money& operator--() 
     {
         if (kopecks == 0) 
@@ -82,7 +103,7 @@ public:
         return *this;
     }
 
-    //постфиксный декремент
+    // постфиксный декремент
     Money operator--(int) 
     {
         Money old = *this;
@@ -90,7 +111,7 @@ public:
         return old;
     }
 
-    //cложение с присваиванием
+    // оператор +=
     Money& operator+=(const Money& other) 
     {
         rubles += other.rubles;
@@ -102,84 +123,86 @@ public:
         return *this;
     }
 
-    //вычитание с присваиванием
+    // оператор -=
     Money& operator-=(const Money& other) 
     {
-    long long total1 = rubles * 100 + kopecks;
-    long long total2 = other.rubles * 100 + other.kopecks;
+        long long total1 = rubles * 100 + kopecks;
+        long long total2 = other.rubles * 100 + other.kopecks;
 
-    if (total2 > total1) 
-    {
-        cout << "Недостаточно средств" << endl;
+        if (total2 > total1) 
+        {
+            cout << "Недостаточно средств" << endl;
+            return *this;
+        }
+
+        long long result = total1 - total2;
+
+        rubles = result / 100;
+        kopecks = result % 100;
+
         return *this;
     }
 
-    long long result = total1 - total2;
-
-    rubles = result / 100;
-    kopecks = result % 100;
-
-    return *this;
-    }
-
-    //умножение с присваиванием
+    // оператор *=
     Money& operator*=(double number) 
     {
-    long long total = rubles * 100 + kopecks;
-    total = static_cast<long long>(total * number);//преобразует результат обратно в ценлое число копеек
-    rubles = total / 100;
-    kopecks = total % 100;
-    return *this;
-    }
+        long long total = rubles * 100 + kopecks;
+        total = static_cast<long long>(total * number);
 
-    //деление с присваиванием
-    Money& operator/=(double number) 
-    {
-    if (number == 0) 
-    {
-        cout << "На 0 делить нельзя" << endl;
+        rubles = total / 100;
+        kopecks = total % 100;
+
         return *this;
     }
 
-    long long total = rubles * 100 + kopecks;
-    total = static_cast<long long>(total / number);
-
-    rubles = total / 100;
-    kopecks = total % 100;
-
-    return *this;
-    }
-
-    //сложение двух сумм
-    friend Money operator+(Money m1, const Money& m2)//разрешает обращаться к закрытым полям
+    // оператор /=
+    Money& operator/=(double number) 
     {
-    m1 += m2;
-    return m1;
+        if (number == 0) 
+        {
+            cout << "На 0 делить нельзя" << endl;
+            return *this;
+        }
+
+        long long total = rubles * 100 + kopecks;
+        total = static_cast<long long>(total / number);
+
+        rubles = total / 100;
+        kopecks = total % 100;
+
+        return *this;
     }
 
-    //вычитание двух сумм
-    friend Money operator-(Money m1, const Money& m2)
+    // оператор +
+    friend Money operator+(Money m1, const Money& m2) 
+    {
+        m1 += m2;
+        return m1;
+    }
+
+    // оператор -
+    friend Money operator-(Money m1, const Money& m2) 
     {
         m1 -= m2;
         return m1;
     }
 
-    // Умножение двух сумм
-    friend Money operator*(Money m1, double number)
+    // оператор *
+    friend Money operator*(Money m1, double number) 
     {
         m1 *= number;
         return m1;
     }
 
-    // Деление двух сумм
-    friend Money operator/(Money m1, double number)
+    // оператор /
+    friend Money operator/(Money m1, double number) 
     {
         m1 /= number;
         return m1;
     }
 
-    // Проверка: m1 меньше m2
-    friend bool operator<(const Money& m1, const Money& m2)
+    // оператор <
+    friend bool operator<(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
         long long total2 = m2.rubles * 100 + m2.kopecks;
@@ -187,8 +210,8 @@ public:
         return total1 < total2;
     }
 
-    // Проверка: m1 больше m2
-    friend bool operator>(const Money& m1, const Money& m2)
+    // оператор >
+    friend bool operator>(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
         long long total2 = m2.rubles * 100 + m2.kopecks;
@@ -196,8 +219,8 @@ public:
         return total1 > total2;
     }
 
-    // Проверка: m1 меньше или равна m2
-    friend bool operator<=(const Money& m1, const Money& m2)
+    // оператор <=
+    friend bool operator<=(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
         long long total2 = m2.rubles * 100 + m2.kopecks;
@@ -205,8 +228,8 @@ public:
         return total1 <= total2;
     }
 
-    // Проверка: m1 больше или равна m2
-    friend bool operator>=(const Money& m1, const Money& m2)
+    // оператор >=
+    friend bool operator>=(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
         long long total2 = m2.rubles * 100 + m2.kopecks;
@@ -214,28 +237,164 @@ public:
         return total1 >= total2;
     }
 
-    // Проверка равенства сумм
-    friend bool operator==(const Money& m1, const Money& m2)
+    // оператор ==
+    friend bool operator==(const Money& m1, const Money& m2) 
     {
         return m1.rubles == m2.rubles &&
-            m1.kopecks == m2.kopecks;
+               m1.kopecks == m2.kopecks;
     }
 
-    // Проверка неравенства сумм
-    friend bool operator!=(const Money& m1, const Money& m2)
+    // оператор !=
+    friend bool operator!=(const Money& m1, const Money& m2) 
     {
         return !(m1 == m2);
     }
-
 };
 
 int Money::count = 0;
 
-int main() 
+int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
     Money m1;
     Money m2(100);
-    Money m3(250, 50);
+    Money m3(100, 1);
+    Money m4(99, 99);
+
+    cout << "Начальные суммы" << endl;
+    cout << "m1 = ";
+    m1.show();
+    cout << "m2 = ";
+    m2.show();
+    cout << "m3 = ";
+    m3.show();
+    cout << "m4 = ";
+    m4.show();
+
+    // постфиксный инкремент
+    cout << "\nПостфиксный инкремент m2++" << endl;
+    cout << "До: ";
+    m2.show();
+
+    m2++;
+
+    cout << "После: ";
+    m2.show();
+
+    // префиксный инкремент
+    cout << "\nПрефиксный инкремент ++m2" << endl;
+    cout << "До: ";
+    m2.show();
+
+    ++m2;
+
+    cout << "После: ";
+    m2.show();
+
+    // постфиксный декремент
+    cout << "\nПостфиксный декремент m2--" << endl;
+    cout << "До: ";
+    m2.show();
+
+    m2--;
+
+    cout << "После: ";
+    m2.show();
+
+    // префиксный декремент
+    cout << "\nПрефиксный декремент --m2" << endl;
+    cout << "До: ";
+    m2.show();
+
+    --m2;
+
+    cout << "После: ";
+    m2.show();
+
+    // бинарные арифметические операторы
+    cout << "\nАрифметические операции" << endl;
+
+    cout << "m2 + m4 = ";
+    m2.show();
+    cout << "+ ";
+    m4.show();
+    cout << "= ";
+    (m2 + m4).show();
+
+    cout << "m2 - m4 = ";
+    m2.show();
+    cout << "- ";
+    m4.show();
+    cout << "= ";
+    (m2 - m4).show();
+
+    cout << "m2 * 2 = ";
+    m2.show();
+    cout << "* 2 = ";
+    (m2 * 2).show();
+
+    cout << "m2 / 2 = ";
+    m2.show();
+    cout << "/ 2 = ";
+    (m2 / 2).show();
+
+    // арифметические операторы присваивания
+    cout << "\nАрифметические операции присваивания" << endl;
+
+    cout << "m2 += m4: ";
+    m2.show();
+    cout << "+ ";
+    m4.show();
+    m2 += m4;
+    cout << "= ";
+    m2.show();
+
+    cout << "m2 -= m4: ";
+    m2.show();
+    cout << "- ";
+    m4.show();
+    m2 -= m4;
+    cout << "= ";
+    m2.show();
+
+    cout << "m2 *= 2: ";
+    m2.show();
+    cout << "* 2";
+    m2 *= 2;
+    cout << " = ";
+    m2.show();
+
+    cout << "m2 /= 2: ";
+    m2.show();
+    cout << "/ 2";
+    m2 /= 2;
+    cout << " = ";
+    m2.show();
+
+    // операторы сравнения
+    cout << "\nСравнение сумм" << endl;
+    cout << "m2 < m3: " << (m2 < m3) << endl;
+    cout << "m2 > m3: " << (m2 > m3) << endl;
+    cout << "m2 <= m3: " << (m2 <= m3) << endl;
+    cout << "m2 >= m3: " << (m2 >= m3) << endl;
+    cout << "m2 == m3: " << (m2 == m3) << endl;
+    cout << "m2 != m3: " << (m2 != m3) << endl;
+
+    // демонстрация explicit
+    cout << "\nЯвное создание суммы Money(5)" << endl;
+    Money(5).show();
+
+    // демонстрация mutable
+    cout << "\nСчетчик обращений к m4" << endl;
+    m4.showAccessCount();
+    m4.showAccessCount();
+
+    // демонстрация статического поля
+    cout << "\nКоличество созданных объектов" << endl;
+    cout << "Количество вызовов конструкторов: "
+         << Money::getCount() << endl;
 
     return 0;
 }
