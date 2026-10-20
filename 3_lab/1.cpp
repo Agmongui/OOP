@@ -320,33 +320,6 @@ int main()
     cout << "После: ";
     m2.show();
 
-    // бинарные арифметические операторы
-    cout << "\nАрифметические операции" << endl;
-
-    cout << "m2 + m4 = ";
-    m2.show();
-    cout << "+ ";
-    m4.show();
-    cout << "= ";
-    (m2 + m4).show();
-
-    cout << "m2 - m4 = ";
-    m2.show();
-    cout << "- ";
-    m4.show();
-    cout << "= ";
-    (m2 - m4).show();
-
-    cout << "m2 * 2 = ";
-    m2.show();
-    cout << "* 2 = ";
-    (m2 * 2).show();
-
-    cout << "m2 / 2 = ";
-    m2.show();
-    cout << "/ 2 = ";
-    (m2 / 2).show();
-
     // арифметические операторы присваивания
     cout << "\nАрифметические операции присваивания" << endl;
 
@@ -379,6 +352,21 @@ int main()
     m2 /= 2;
     cout << " = ";
     m2.show();
+    
+    // бинарные арифметические операторы
+    cout << "\nБинарные арифметические операции" << endl;
+
+    cout << "m2 + m4 = ";
+    (m2 + m4).show();
+
+    cout << "m2 - m4 = ";
+    (m2 - m4).show();
+
+    cout << "m2 * 2 = ";
+    (m2 * 2).show();
+
+    cout << "m2 / 2 = ";
+    (m2 / 2).show();
 
     // операторы сравнения
     cout << "\nСравнение сумм" << endl;
@@ -392,11 +380,16 @@ int main()
     // демонстрация explicit
     cout << "\nДемонстрация explicit" << endl;
     printMoney(Money(10));
+    // printMoney(10);
 
-    // демонстрация mutable
-    cout << "\nСчетчик обращений к m4" << endl;
-    m4.showAccessCount();
-    m4.showAccessCount();
+    // Демонстрация mutable у const-объекта
+    cout << "\nДемонстрация mutable" << endl;
+
+    const Money m5(50, 25);
+
+    m5.show();
+    m5.showAccessCount();
+    m5.showAccessCount();
 
     // демонстрация статического поля
     cout << "\nКоличество созданных объектов" << endl;
