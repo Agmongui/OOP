@@ -253,6 +253,13 @@ public:
 
 int Money::count = 0;
 
+// функция для демонстрации explicit
+void printMoney(Money m)
+{
+    cout << "Переданная сумма: ";
+    m.show();
+}
+
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -383,8 +390,8 @@ int main()
     cout << "m2 != m3: " << (m2 != m3) << endl;
 
     // демонстрация explicit
-    cout << "\nЯвное создание суммы Money(5)" << endl;
-    Money(5).show();
+    cout << "\nДемонстрация explicit" << endl;
+    printMoney(Money(10));
 
     // демонстрация mutable
     cout << "\nСчетчик обращений к m4" << endl;
