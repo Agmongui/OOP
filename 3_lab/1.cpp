@@ -3,6 +3,11 @@
 
 using namespace std;
 
+/**
+ * @brief Класс для работы с денежными суммами
+ * @details Хранит рубли и копейки, поддерживает арифметические
+ * операции, сравнение и перегрузку унарных операторов.
+ */
 class Money 
 {
 private:
@@ -12,7 +17,10 @@ private:
     static int count; // статический счетчик
 
 public:
-    // конструктор без параметров
+    /**
+     * @brief Конструктор без параметров
+     * @details Создаёт объект с нулевой денежной суммой.
+     */
     Money() 
     {
         rubles = 0;
@@ -20,7 +28,11 @@ public:
         count++;
     }
 
-    // конструктор с рублями
+    /**
+     * @brief Конструктор с одним параметром
+     * @param r Количество рублей
+     * @details explicit запрещает неявное преобразование числа в Money.
+     */
     explicit Money(long long r) 
     {
         rubles = r;
@@ -28,7 +40,12 @@ public:
         count++;
     }
 
-    // конструктор с рублями и копейками
+    /**
+     * @brief Конструктор с рублями и копейками
+     * @param r Количество рублей
+     * @param k Количество копеек
+     * @details Копейки, превышающие 99, переводятся в рубли.
+     */
     Money(long long r, int k) 
     {
         rubles = r + k / 100;
@@ -36,13 +53,18 @@ public:
         count++;
     }
 
-    // деструктор
+    /**
+     * @brief Деструктор класса
+     * @details Выводит сообщение при уничтожении объекта.
+     */
     ~Money() 
     {
         cout << "\nОбъект Money уничтожен" << endl;
     }
 
-    // вывод суммы
+    /**
+     * @brief Выводит денежную сумму
+     */
     void show() const 
     {
         cout << rubles << " руб. ";
@@ -53,13 +75,19 @@ public:
         cout << kopecks << " коп." << endl;
     }
 
-    // статический счетчик
+    /**
+     * @brief Возвращает количество вызовов конструкторов
+     * @return Значение статического счётчика
+     */
     static int getCount() 
     {
         return count;
     }
 
-    // счетчик обращений
+    /**
+     * @brief Увеличивает и выводит счётчик обращений
+     * @details Метод const изменяет поле accessCount благодаря mutable.
+     */
     void showAccessCount() const 
     {
         accessCount++;
@@ -67,7 +95,11 @@ public:
              << accessCount << endl;
     }
 
-    // префиксный инкремент
+    /**
+     * @brief Префиксный инкремент
+     * @details Увеличивает сумму на одну копейку.
+     * @return Ссылка на текущий объект
+     */
     Money& operator++() 
     {
         kopecks++;
@@ -81,7 +113,11 @@ public:
         return *this;
     }
 
-    // постфиксный инкремент
+    /**
+     * @brief Постфиксный инкремент
+     * @details Сохраняет старую сумму и увеличивает текущую на копейку.
+     * @return Копия объекта до изменения
+     */
     Money operator++(int) 
     {
         Money old = *this;
@@ -89,7 +125,11 @@ public:
         return old;
     }
 
-    // префиксный декремент
+    /**
+     * @brief Префиксный декремент
+     * @details Уменьшает сумму на одну копейку.
+     * @return Ссылка на текущий объект
+     */
     Money& operator--() 
     {
         if (kopecks == 0) 
@@ -103,7 +143,11 @@ public:
         return *this;
     }
 
-    // постфиксный декремент
+    /**
+     * @brief Постфиксный декремент
+     * @details Сохраняет старую сумму и уменьшает текущую на копейку.
+     * @return Копия объекта до изменения
+     */
     Money operator--(int) 
     {
         Money old = *this;
@@ -111,7 +155,11 @@ public:
         return old;
     }
 
-    // оператор +=
+    /**
+     * @brief Сложение с присваиванием
+     * @param other Денежная сумма для прибавления
+     * @return Ссылка на изменённый объект
+     */
     Money& operator+=(const Money& other) 
     {
         rubles += other.rubles;
@@ -123,7 +171,12 @@ public:
         return *this;
     }
 
-    // оператор -=
+    /**
+     * @brief Вычитание с присваиванием
+     * @param other Денежная сумма для вычитания
+     * @return Ссылка на текущий объект
+     * @details Если средств недостаточно, сумма не изменяется.
+     */
     Money& operator-=(const Money& other) 
     {
         long long total1 = rubles * 100 + kopecks;
@@ -143,7 +196,11 @@ public:
         return *this;
     }
 
-    // оператор *=
+    /**
+     * @brief Умножение с присваиванием
+     * @param number Число-множитель
+     * @return Ссылка на изменённый объект
+     */
     Money& operator*=(double number) 
     {
         long long total = rubles * 100 + kopecks;
@@ -155,7 +212,12 @@ public:
         return *this;
     }
 
-    // оператор /=
+    /**
+     * @brief Деление с присваиванием
+     * @param number Число-делитель
+     * @return Ссылка на текущий объект
+     * @details При делении на ноль сумма не изменяется.
+     */
     Money& operator/=(double number) 
     {
         if (number == 0) 
@@ -173,35 +235,64 @@ public:
         return *this;
     }
 
-    // оператор +
+    /**
+     * @brief Бинарное сложение денежных сумм
+     * @param m1 Первая денежная сумма
+     * @param m2 Вторая денежная сумма
+     * @return Новый объект с результатом сложения
+     * @details Использует оператор +=.
+     */
     friend Money operator+(Money m1, const Money& m2) 
     {
         m1 += m2;
         return m1;
     }
 
-    // оператор -
+    /**
+     * @brief Бинарное вычитание денежных сумм
+     * @param m1 Первая денежная сумма
+     * @param m2 Вторая денежная сумма
+     * @return Новый объект с результатом вычитания
+     * @details Использует оператор -=.
+     */
     friend Money operator-(Money m1, const Money& m2) 
     {
         m1 -= m2;
         return m1;
     }
 
-    // оператор *
+    /**
+     * @brief Умножение денежной суммы на число
+     * @param m1 Денежная сумма
+     * @param number Множитель
+     * @return Новый объект с результатом умножения
+     * @details Использует оператор *=.
+     */
     friend Money operator*(Money m1, double number) 
     {
         m1 *= number;
         return m1;
     }
 
-    // оператор /
+    /**
+     * @brief Деление денежной суммы на число
+     * @param m1 Денежная сумма
+     * @param number Делитель
+     * @return Новый объект с результатом деления
+     * @details Использует оператор /=.
+     */
     friend Money operator/(Money m1, double number) 
     {
         m1 /= number;
         return m1;
     }
 
-    // оператор <
+    /**
+     * @brief Проверяет, меньше ли первая сумма второй
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если m1 меньше m2
+     */
     friend bool operator<(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
@@ -210,7 +301,12 @@ public:
         return total1 < total2;
     }
 
-    // оператор >
+    /**
+     * @brief Проверяет, больше ли первая сумма второй
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если m1 больше m2
+     */
     friend bool operator>(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
@@ -219,7 +315,12 @@ public:
         return total1 > total2;
     }
 
-    // оператор <=
+    /**
+     * @brief Проверяет, меньше или равна первая сумма второй
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если m1 меньше или равна m2
+     */
     friend bool operator<=(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
@@ -228,7 +329,12 @@ public:
         return total1 <= total2;
     }
 
-    // оператор >=
+    /**
+     * @brief Проверяет, больше или равна первая сумма второй
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если m1 больше или равна m2
+     */
     friend bool operator>=(const Money& m1, const Money& m2) 
     {
         long long total1 = m1.rubles * 100 + m1.kopecks;
@@ -237,29 +343,52 @@ public:
         return total1 >= total2;
     }
 
-    // оператор ==
+    /**
+     * @brief Проверяет равенство денежных сумм
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если суммы равны
+     */
     friend bool operator==(const Money& m1, const Money& m2) 
     {
         return m1.rubles == m2.rubles &&
                m1.kopecks == m2.kopecks;
     }
 
-    // оператор !=
+    /**
+     * @brief Проверяет неравенство денежных сумм
+     * @param m1 Первая сумма
+     * @param m2 Вторая сумма
+     * @return true, если суммы не равны
+     */
     friend bool operator!=(const Money& m1, const Money& m2) 
     {
         return !(m1 == m2);
     }
 };
 
+/**
+ * @brief Инициализация статического счётчика класса Money
+ */
 int Money::count = 0;
 
-// функция для демонстрации explicit
+/**
+ * @brief Выводит переданную денежную сумму
+ * @param m Объект класса Money
+ * @details Используется для демонстрации explicit.
+ */
 void printMoney(Money m)
 {
     cout << "Переданная сумма: ";
     m.show();
 }
 
+/**
+ * @brief Главная функция программы
+ * @details Создаёт объекты и демонстрирует работу перегруженных
+ * операторов, explicit, mutable и статического поля.
+ * @return 0 при успешном завершении
+ */
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
