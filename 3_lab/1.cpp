@@ -1,5 +1,7 @@
 #include <iostream>
 #include <windows.h>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -91,8 +93,7 @@ public:
     void showAccessCount() const 
     {
         accessCount++;
-        cout << "Обращений к сумме: "
-             << accessCount << endl;
+        cout << "Обращений к сумме: " << accessCount << endl;
     }
 
     /**
@@ -372,6 +373,135 @@ public:
  */
 int Money::count = 0;
 
+
+/**
+ * @brief Класс банковского счёта
+ * @details Хранит баланс и историю денежных операций.
+ */
+class BankAccount
+{
+private:
+    int accountNumber;
+    Money balance;
+
+    struct Operation
+    {
+        string type;
+        Money amount;
+        int otherAccount;
+
+        Operation(string t, const Money& a, int other = 0)
+            : type(t), amount(a), otherAccount(other) {}
+    };
+
+    vector<Operation> history;
+
+public:
+    // Создание банковского счёта
+    BankAccount(int number, const Money& initialBalance = Money())
+        : accountNumber(number), balance(initialBalance) {}
+
+    // Просмотр баланса
+    void showBalance() const
+    {
+        cout << "Счёт №" << accountNumber << ", баланс: ";
+        balance.show();
+    }
+
+    // Зачисление денег
+    void deposit(const Money& amount)
+    {
+        if (amount <= Money())
+        {
+            cout << "Сумма зачисления должна быть положительной" << endl;
+            return;
+        }
+
+        balance += amount;
+        history.push_back(Operation("Зачисление", amount));
+
+        cout << "Деньги зачислены на счёт №" << accountNumber << endl;
+    }
+
+    // Снятие денег
+    void withdraw(const Money& amount)
+    {
+        if (amount <= Money())
+        {
+            cout << "Сумма расхода должна быть положительной" << endl;
+            return;
+        }
+
+        if (balance < amount)
+        {
+            cout << "Недостаточно средств на счёте №" << accountNumber << endl;
+            return;
+        }
+
+        balance -= amount;
+        history.push_back(Operation("Расход", amount));
+
+        cout << "Деньги списаны со счёта №" << accountNumber << endl;
+    }
+
+    // Перевод денег на другой счёт
+    void transferTo(BankAccount& recipient,
+                    const Money& amount)
+    {
+        if (&recipient == this)
+        {
+            cout << "Нельзя переводить деньги на тот же счёт" << endl;
+            return;
+        }
+
+        if (amount <= Money())
+        {
+            cout << "Сумма перевода должна быть положительной" << endl;
+            return;
+        }
+
+        if (balance < amount)
+        {
+            cout << "Недостаточно средств для перевода" << endl;
+            return;
+        }
+
+        balance -= amount;
+        recipient.balance += amount;
+
+        history.push_back(
+            Operation("Перевод на счёт", amount, recipient.accountNumber));
+
+        recipient.history.push_back(
+            Operation("Перевод со счёта", amount, accountNumber));
+
+    }
+
+    // Просмотр истории операций
+    void showHistory() const
+    {
+        cout << "\nИстория операций счёта №"
+             << accountNumber << ":" << endl;
+
+        if (history.empty())
+        {
+            cout << "Операций пока нет" << endl;
+            return;
+        }
+
+        for (const Operation& op : history)
+        {
+            cout << op.type << ": ";
+            op.amount.show();
+
+            if (op.otherAccount != 0)
+            {
+                cout << "Счёт №" << op.otherAccount << endl;
+            }
+        }
+    }
+};
+
 /**
  * @brief Выводит переданную денежную сумму
  * @param m Объект класса Money
@@ -524,6 +654,40 @@ int main()
     cout << "\nКоличество созданных объектов" << endl;
     cout << "Количество вызовов конструкторов: "
          << Money::getCount() << endl;
+
+    // Демонстрация банковских счетов
+    cout << "\nБанковсие счета" << endl;
+
+    BankAccount account1(001, Money(5000, 50));
+    BankAccount account2(002, Money(1000, 0));
+
+    // Начальные балансы
+    cout << "\nНачальные балансы:" << endl;
+    account1.showBalance();
+    account2.showBalance();
+
+    // Зачисление
+    cout << "\nЗачисление денег на счет №1 (+ 500,25)" << endl;
+    account1.deposit(Money(500, 25));
+    account1.showBalance();
+
+    // Расход
+    cout << "\nРасход денег со счета №1 (- 200,50)" << endl;
+    account1.withdraw(Money(200, 50));
+    account1.showBalance();
+
+    // Перевод между счетами
+    cout << "\nПеревод денег с счета №1 на счет №2, в размере 1000" << endl;
+    account1.transferTo(account2, Money(1000, 0));
+
+    // Балансы после перевода
+    cout << "\nБалансы после перевода:" << endl;
+    account1.showBalance();
+    account2.showBalance();
+
+    // История операций
+    account1.showHistory();
+    account2.showHistory();
 
     return 0;
 }
