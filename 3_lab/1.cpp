@@ -1,8 +1,6 @@
-
 #include <iostream>
 #include <windows.h>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -318,11 +316,46 @@ private:
             : type(t), amount(a), otherAccount(other) {}
     };
 
-    vector<Operation> history;
+    // Обычный массив вместо vector
+    static const int MAX_OPERATIONS = 100;
+    Operation* history[MAX_OPERATIONS];
+    int historySize = 0;
+
+    /**
+     * @brief Добавление операции в историю
+     */
+    void addOperation(const string& type,
+                      const Money& amount,
+                      int otherAccount = 0)
+    {
+        if (historySize >= MAX_OPERATIONS)
+        {
+            cout << "История операций заполнена" << endl;
+            return;
+        }
+
+        history[historySize] = new Operation(type, amount, otherAccount);//создаёт новый объект Operation, который хранит информацию об одной банковской операции
+
+        historySize++;
+    }
 
 public:
     BankAccount(int number, const Money& initialBalance = Money())
-        : accountNumber(number), balance(initialBalance) {}
+        : accountNumber(number), balance(initialBalance)
+    {
+        for (int i = 0; i < MAX_OPERATIONS; i++)
+            history[i] = nullptr;
+    }
+
+    // Запрещаем копирование счёта, чтобы не копировать указатели
+    BankAccount(const BankAccount&) = delete;
+    BankAccount& operator=(const BankAccount&) = delete;
+
+    ~BankAccount()
+    {
+        for (int i = 0; i < historySize; i++)
+            delete history[i];
+    }
 
     void showBalance() const
     {
@@ -339,7 +372,7 @@ public:
         }
 
         balance += amount;
-        history.push_back(Operation("Зачисление", amount));
+        addOperation("Зачисление", amount);
 
         cout << "Деньги зачислены на счёт №"
              << accountNumber << endl;
@@ -361,7 +394,7 @@ public:
         }
 
         balance -= amount;
-        history.push_back(Operation("Расход", amount));
+        addOperation("Расход", amount);
 
         cout << "Деньги списаны со счёта №"
              << accountNumber << endl;
@@ -388,16 +421,22 @@ public:
             return;
         }
 
+        // Проверяем наличие места в обеих историях
+        if (historySize >= MAX_OPERATIONS ||
+            recipient.historySize >= MAX_OPERATIONS)
+        {
+            cout << "История одного из счетов заполнена" << endl;
+            return;
+        }
+
         balance -= amount;
         recipient.balance += amount;
 
-        history.push_back(
-            Operation("Перевод на счёт", amount,
-                      recipient.accountNumber));
+        addOperation("Перевод на счёт", amount,
+                     recipient.accountNumber);
 
-        recipient.history.push_back(
-            Operation("Перевод со счёта", amount,
-                      accountNumber));
+        recipient.addOperation("Перевод со счёта", amount,
+                               accountNumber);
     }
 
     void showHistory() const
@@ -405,19 +444,20 @@ public:
         cout << "\nИстория операций счёта №"
              << accountNumber << ":" << endl;
 
-        if (history.empty())
+        if (historySize == 0)
         {
             cout << "Операций пока нет" << endl;
             return;
         }
 
-        for (const Operation& op : history)
+        for (int i = 0; i < historySize; i++)
         {
-            cout << op.type << ": ";
-            op.amount.show();
+            cout << history[i]->type << ": ";
+            history[i]->amount.show();
 
-            if (op.otherAccount != 0)
-                cout << "Счёт №" << op.otherAccount << endl;
+            if (history[i]->otherAccount != 0)
+                cout << "Счёт №"
+                     << history[i]->otherAccount << endl;
         }
     }
 };
