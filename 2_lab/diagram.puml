@@ -1,0 +1,56 @@
+@startuml  Диаграмма класса BankAccount
+
+class AccountType {
+    - savings : bool
+
+    + AccountType(isSavings : bool = false)
+    + isSavings() : bool
+    + toString() : string
+}
+
+class BankAccount {
+    - accountNumber : long long
+    - ownerName : string
+    - balance : double
+    - active : bool
+    - currency : string
+    - type : AccountType
+    - {static} objectCount : int
+
+    - validateAccountNumber(number : long long) : void
+    - validateOwnerName(owner : string) : void
+    - validateBalance(balance : double) : void
+
+    + BankAccount()
+    + BankAccount(
+        number : long long,
+        owner : string,
+        initialBalance : double,
+        accountCurrency : string,
+        accountType : AccountType
+    )
+    + BankAccount(
+        number : long long,
+        owner : string
+    )
+    + ~BankAccount()
+
+    + {static} getObjectCount() : int
+
+    + getAccountNumber() : long long
+    + getOwnerName() : string
+    + getBalance() : double
+    + isActive() : bool
+    + getCurrency() : string
+    + getType() : AccountType
+
+    + deposit(amount : double) : void
+    + withdraw(amount : double) : bool
+    + block() : void
+    + unblock() : void
+    + print() : void
+}
+
+BankAccount *-- AccountType
+
+@enduml
