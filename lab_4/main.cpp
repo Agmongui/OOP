@@ -18,6 +18,7 @@ int main()
     for (int i = 0; i < 2; i++)
     {
         cout << "Площадь фигуры: " << figures[i]->area() << endl;
+        showArea(*figures[i]);
 
         cout << "Отрисовка фигуры:" << endl;
         figures[i]->draw();

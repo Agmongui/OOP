@@ -15,6 +15,7 @@ protected:
 
 public:
     virtual double area() const = 0;
+
     virtual void print() const
     {
         cout << "Площадь фигуры: " << area() << endl;
@@ -22,6 +23,10 @@ public:
 
     static int getFigureCount();
     static double getAverageArea();
+
+    friend void showArea(const Figure& figure);
 };
+
+void showArea(const Figure& figure);
 
 #endif
