@@ -6,7 +6,7 @@
 class Square : public Rectangle
 {
 public:
-    
+    Square(double side);
 };
 
 #endif
