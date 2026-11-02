@@ -11,6 +11,8 @@ protected:
     
 public:
     Polygon(int sides, double* coordinates);
+    Polygon(const Polygon& other); //конструктор копирования
+    Polygon& operator=(const Polygon& other); // оператор присваивания
     ~Polygon();
     
     virtual void draw() const;
