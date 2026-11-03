@@ -2,8 +2,9 @@
 #define SQUARE_H
 
 #include "Rectangle.h"
+#include "Lab3Export.h"
 
-class Square : public Rectangle
+class LAB3_API Square : public Rectangle
 {
 public:
     Square(double side);

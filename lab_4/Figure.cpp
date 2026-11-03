@@ -3,6 +3,11 @@
 int Figure::figureCount = 0;
 double Figure::totalArea = 0;
 
+void Figure::print() const
+{
+    cout << "Площадь фигуры: " << area() << endl;
+}
+
 int Figure::getFigureCount()
 {
     return figureCount;
